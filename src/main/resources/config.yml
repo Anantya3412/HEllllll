@@ -1,6 +1,0 @@
-settings:
-  prefix: "&8[&cRivalSMP&8] "
-announcements:
-  enabled: true
-  interval-seconds: 300
-  message: "&aWelcome to the server!"
