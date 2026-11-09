@@ -1,0 +1,45 @@
+
+name: Build zHomes
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build zHomes Plugin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+
+      - name: Extract plugin source
+        run: unzip -q zHomes-source.zip -d .
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: zHomes/pom.xml
+
+      - name: Verify Java
+        run: java -version
+
+      - name: Build zHomes
+        run: mvn --batch-mode --no-transfer-progress -f zHomes/pom.xml clean package
+
+      - name: Upload zHomes JAR
+        uses: actions/upload-artifact@v7
+        with:
+          name: zHomes-plugin-v1.0.1
+          path: zHomes/target/*.jar
+          if-no-files-found: error
+          retention-days: 14
